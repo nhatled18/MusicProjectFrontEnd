@@ -1,0 +1,278 @@
+.artist-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+}
+
+.artist-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.artist-hero {
+  text-align: center;
+  color: white;
+  margin-bottom: 60px;
+  padding: 40px 20px;
+}
+
+.artist-hero h1 {
+  font-size: 56px;
+  margin-bottom: 15px;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.artist-hero p {
+  font-size: 20px;
+  opacity: 0.9;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* Featured Artists */
+.featured-artists-section {
+  margin-bottom: 80px;
+}
+
+.featured-artists-section h2 {
+  color: white;
+  font-size: 32px;
+  margin-bottom: 30px;
+  padding-left: 10px;
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.featured-artist-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 40px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.featured-artist-card:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-15px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.featured-avatar {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 25px;
+  background: linear-gradient(135deg, #ff6b9d, #c23b22);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.featured-info h3 {
+  color: white;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.verified {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  background: #3498db;
+  border-radius: 50%;
+  font-size: 16px;
+}
+
+.featured-info .genre {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.featured-info .followers {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.follow-btn {
+  padding: 12px 40px;
+  border-radius: 50px;
+  border: 2px solid white;
+  background: white;
+  color: #667eea;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.follow-btn:hover {
+  background: transparent;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Popular Artists */
+.popular-artists-section {
+  margin-bottom: 80px;
+}
+
+.popular-artists-section h2 {
+  color: white;
+  font-size: 32px;
+  margin-bottom: 30px;
+  padding-left: 10px;
+}
+
+.popular-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 25px;
+}
+
+.artist-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 30px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.artist-card:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.artist-avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, #a8edea, #fed6e3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+}
+
+.artist-card h3 {
+  color: white;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.artist-card .genre {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.artist-card .followers {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+}
+
+/* Rising Stars */
+.rising-stars-section h2 {
+  color: white;
+  font-size: 32px;
+  margin-bottom: 30px;
+  padding-left: 10px;
+}
+
+.rising-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.rising-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 30px 25px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.rising-card:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.rising-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #e74c3c;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.rising-avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, #ff9a9e, #fecfef);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+}
+
+.rising-card h3 {
+  color: white;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.rising-card .genre {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.rising-card .followers {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.follow-btn-small {
+  padding: 8px 25px;
+  border-radius: 50px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.follow-btn-small:hover {
+  background: white;
+  color: #667eea;
+  border-color: white;
+}

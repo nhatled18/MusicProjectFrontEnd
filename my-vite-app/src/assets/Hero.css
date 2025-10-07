@@ -1,0 +1,35 @@
+.hero {
+  text-align: center;
+  padding: 100px 20px;
+  color: white;
+}
+
+.hero h1 {
+  font-size: 64px;
+  margin-bottom: 20px;
+  animation: fadeInDown 1s ease-out;
+}
+
+.hero p {
+  font-size: 24px;
+  margin-bottom: 40px;
+  animation: fadeInUp 1s ease-out 0.2s backwards;
+}
+
+.cta-button {
+  background: white;
+  color: #667eea;
+  padding: 15px 40px;
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  animation: fadeInUp 1s ease-out 0.4s backwards;
+}
+
+.cta-button:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}

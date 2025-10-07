@@ -1,0 +1,53 @@
+.song-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.song-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.song-card-img {
+  width: 100%;
+  height: 200px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  margin-bottom: 15px;
+}
+
+.gradient-1 {
+  background: linear-gradient(135deg, #a8edea, #fed6e3);
+}
+
+.gradient-2 {
+  background: linear-gradient(135deg, #ffecd2, #fcb69f);
+}
+
+.gradient-3 {
+  background: linear-gradient(135deg, #ff9a9e, #fecfef);
+}
+
+.gradient-4 {
+  background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+}
+
+.song-card h3 {
+  color: white;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.song-card p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
