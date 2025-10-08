@@ -3,7 +3,7 @@ import BackgroundAnimation from '../components/BackgroundAnimation';
 import Header from '../components/Header';
 import Hero from '../Components/Hero';
 import MusicPlayer from '../Components/MusicPlayer';
-import Playlist from '../Components/PlaylistSection ';
+import Playlist from '../Components/PlaylistSection';
 import Notification from '../Components/Notification';
 
 export default function Home() {
