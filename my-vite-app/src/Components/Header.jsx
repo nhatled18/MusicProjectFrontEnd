@@ -44,7 +44,7 @@ export default function Header({ isLoggedIn, onLogin, onLogout }) {
           <ul className="nav-links">
             <li><Link to="/">Trang chủ</Link></li>
             <li><Link to="/discover">Khám phá</Link></li>
-            <li><a href="#playlist">Playlist</a></li>
+            <li><Link to="/playlist">Playlist</Link></li>
             <li><Link to="/artist">Nghệ sĩ</Link></li>
           </ul>
         </div>

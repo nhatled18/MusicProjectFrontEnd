@@ -3,6 +3,7 @@ import './App.css'
 import Home from './Pages/Home'
 import Discover from './Pages/Discover'
 import Artist from './Pages/Artist'
+import PlaylistPage from './Pages/Playlist'
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/discover" element={<Discover />} />
           <Route path="/artist" element={<Artist />} />
+          <Route path="/playlist" element={<PlaylistPage />} />
         </Routes>
       </div>
     </Router>

@@ -1,38 +1,71 @@
-import { useState } from 'react';
-import BackgroundAnimation from '../Components/BackgroundAnimation';
-import Header from '../Components/Header';
+import { useState, useEffect } from 'react';
+import BackgroundAnimation from '../components/BackgroundAnimation';
+import Header from '../components/Header';
 import '../assets/Artist.css';
+import { getTopArtists, searchArtists } from '../services/lastfmapi';
 
 export default function Artist() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [artists, setArtists] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [searching, setSearching] = useState(false);
 
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => setIsLoggedIn(false);
 
-  const featuredArtists = [
-    { id: 1, name: 'Luna Sky', genre: 'Pop', followers: '2.5M', avatar: '👩‍🎤', verified: true },
-    { id: 2, name: 'Neon Pulse', genre: 'EDM', followers: '1.8M', avatar: '🎧', verified: true },
-    { id: 3, name: 'Jazz Master', genre: 'Jazz', followers: '950K', avatar: '🎷', verified: true },
-    { id: 4, name: 'Rock Legend', genre: 'Rock', followers: '3.2M', avatar: '🎸', verified: true },
-  ];
+  // Fetch top artists khi component mount
+  useEffect(() => {
+    fetchTopArtists();
+  }, []);
 
-  const popularArtists = [
-    { id: 5, name: 'Acoustic Soul', genre: 'Acoustic', followers: '1.2M', avatar: '🎹' },
-    { id: 6, name: 'Hip Hop King', genre: 'Hip Hop', followers: '2.1M', avatar: '🎤' },
-    { id: 7, name: 'Classical Dream', genre: 'Classical', followers: '850K', avatar: '🎻' },
-    { id: 8, name: 'Country Star', genre: 'Country', followers: '1.5M', avatar: '🤠' },
-    { id: 9, name: 'R&B Queen', genre: 'R&B', followers: '1.9M', avatar: '👸' },
-    { id: 10, name: 'Latin Fire', genre: 'Latin', followers: '1.3M', avatar: '💃' },
-    { id: 11, name: 'Indie Wave', genre: 'Indie', followers: '780K', avatar: '🌊' },
-    { id: 12, name: 'Metal Storm', genre: 'Metal', followers: '920K', avatar: '🤘' },
-  ];
+  const fetchTopArtists = async () => {
+    setLoading(true);
+    const data = await getTopArtists(50);
+    setArtists(data);
+    setLoading(false);
+  };
 
-  const risingStars = [
-    { id: 13, name: 'Fresh Beat', genre: 'Pop', followers: '150K', avatar: '⭐', trending: '+45%' },
-    { id: 14, name: 'New Wave', genre: 'Electronic', followers: '220K', avatar: '🌟', trending: '+62%' },
-    { id: 15, name: 'Young Soul', genre: 'R&B', followers: '180K', avatar: '✨', trending: '+38%' },
-    { id: 16, name: 'Beat Maker', genre: 'Hip Hop', followers: '195K', avatar: '🔥', trending: '+51%' },
-  ];
+  // Handle search
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    setSearching(true);
+    const results = await searchArtists(searchQuery, 20);
+    setSearchResults(results);
+    setSearching(false);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery('');
+    setSearchResults([]);
+  };
+
+  // Format số followers
+  const formatNumber = (num) => {
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+    return num;
+  };
+
+  // Tạo avatar đẹp từ tên nghệ sĩ
+  const getAvatarUrl = (name) => {
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&size=300&background=random&color=fff&bold=true&font-size=0.4`;
+  };
+
+  // Check xem có ảnh hợp lệ không
+  const hasValidImage = (imageArray, index) => {
+    return imageArray?.[index]?.['#text'] && 
+           imageArray[index]['#text'] !== '' &&
+           !imageArray[index]['#text'].includes('2a96cbd8b46e442fc41c2b86b821562f');
+  };
+
+  // Chia artists thành các nhóm
+  const featuredArtists = artists.slice(0, 4);
+  const popularArtists = artists.slice(4, 16);
+  const risingStars = artists.slice(16, 20);
 
   return (
     <div className="artist-page">
@@ -43,57 +76,144 @@ export default function Artist() {
         <section className="artist-hero">
           <h1>Nghệ Sĩ Nổi Bật</h1>
           <p>Khám phá các nghệ sĩ hàng đầu và tài năng mới nổi</p>
+          
+          {/* Search Form */}
+          <form onSubmit={handleSearch} className="artist-search-form">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Tìm kiếm nghệ sĩ..."
+              className="artist-search-input"
+            />
+            <button type="submit" className="artist-search-btn">
+              🔍 Tìm kiếm
+            </button>
+            {searchResults.length > 0 && (
+              <button type="button" onClick={clearSearch} className="artist-clear-btn">
+                ✕ Xóa
+              </button>
+            )}
+          </form>
         </section>
 
-        <section className="featured-artists-section">
-          <h2>⭐ Nghệ Sĩ Nổi Bật</h2>
-          <div className="featured-grid">
-            {featuredArtists.map(artist => (
-              <div key={artist.id} className="featured-artist-card">
-                <div className="featured-avatar">{artist.avatar}</div>
-                <div className="featured-info">
-                  <h3>
-                    {artist.name}
-                    {artist.verified && <span className="verified">✓</span>}
-                  </h3>
-                  <p className="genre">{artist.genre}</p>
-                  <p className="followers">👥 {artist.followers} người theo dõi</p>
-                  <button className="follow-btn">Theo dõi</button>
+        {/* Search Results */}
+        {searching && (
+          <div className="loading-section">
+            <div className="loading-spinner">🎵</div>
+            <p>Đang tìm kiếm...</p>
+          </div>
+        )}
+
+        {searchResults.length > 0 && !searching && (
+          <section className="search-results-section">
+            <h2>🔍 Kết quả tìm kiếm "{searchQuery}"</h2>
+            <div className="popular-grid">
+              {searchResults.map((artist, index) => (
+                <div key={artist.mbid || index} className="artist-card">
+                  <div className="artist-avatar">
+                    {hasValidImage(artist.image, 2) ? (
+                      <img src={artist.image[2]['#text']} alt={artist.name} />
+                    ) : (
+                      <img src={getAvatarUrl(artist.name)} alt={artist.name} />
+                    )}
+                  </div>
+                  <h3>{artist.name}</h3>
+                  <p className="followers">
+                    {artist.listeners ? `${formatNumber(artist.listeners)} người nghe` : 'Nghệ sĩ'}
+                  </p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
 
-        <section className="popular-artists-section">
-          <h2>🔥 Nghệ Sĩ Phổ Biến</h2>
-          <div className="popular-grid">
-            {popularArtists.map(artist => (
-              <div key={artist.id} className="artist-card">
-                <div className="artist-avatar">{artist.avatar}</div>
-                <h3>{artist.name}</h3>
-                <p className="genre">{artist.genre}</p>
-                <p className="followers">{artist.followers}</p>
-              </div>
-            ))}
+        {/* Loading State */}
+        {loading && searchResults.length === 0 && (
+          <div className="loading-section">
+            <div className="loading-spinner">🎵</div>
+            <p>Đang tải dữ liệu nghệ sĩ...</p>
           </div>
-        </section>
+        )}
 
-        <section className="rising-stars-section">
-          <h2>🚀 Tài Năng Mới Nổi</h2>
-          <div className="rising-grid">
-            {risingStars.map(artist => (
-              <div key={artist.id} className="rising-card">
-                <div className="rising-badge">{artist.trending}</div>
-                <div className="rising-avatar">{artist.avatar}</div>
-                <h3>{artist.name}</h3>
-                <p className="genre">{artist.genre}</p>
-                <p className="followers">{artist.followers} người theo dõi</p>
-                <button className="follow-btn-small">+ Theo dõi</button>
+        {/* Main Content - Chỉ hiện khi không search */}
+        {!loading && searchResults.length === 0 && (
+          <>
+            <section className="featured-artists-section">
+              <h2>⭐ Nghệ Sĩ Nổi Bật</h2>
+              <div className="featured-grid">
+                {featuredArtists.map((artist, index) => (
+                  <div key={artist.mbid || index} className="featured-artist-card">
+                    <div className="featured-avatar">
+                      {hasValidImage(artist.image, 3) ? (
+                        <img src={artist.image[3]['#text']} alt={artist.name} />
+                      ) : (
+                        <img src={getAvatarUrl(artist.name)} alt={artist.name} />
+                      )}
+                    </div>
+                    <div className="featured-info">
+                      <h3>
+                        {artist.name}
+                        <span className="verified">✓</span>
+                      </h3>
+                      <p className="followers">
+                        👥 {formatNumber(artist.listeners)} người nghe
+                      </p>
+                      <p className="playcount">
+                        ▶ {formatNumber(artist.playcount)} lượt phát
+                      </p>
+                      <button className="follow-btn">Theo dõi</button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
+            </section>
+
+            <section className="popular-artists-section">
+              <h2>🔥 Nghệ Sĩ Phổ Biến</h2>
+              <div className="popular-grid">
+                {popularArtists.map((artist, index) => (
+                  <div key={artist.mbid || index} className="artist-card">
+                    <div className="artist-avatar">
+                      {hasValidImage(artist.image, 2) ? (
+                        <img src={artist.image[2]['#text']} alt={artist.name} />
+                      ) : (
+                        <img src={getAvatarUrl(artist.name)} alt={artist.name} />
+                      )}
+                    </div>
+                    <h3>{artist.name}</h3>
+                    <p className="followers">
+                      {formatNumber(artist.listeners)} người nghe
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="rising-stars-section">
+              <h2>🚀 Tài Năng Mới Nổi</h2>
+              <div className="rising-grid">
+                {risingStars.map((artist, index) => (
+                  <div key={artist.mbid || index} className="rising-card">
+                    <div className="rising-badge">NEW</div>
+                    <div className="rising-avatar">
+                      {hasValidImage(artist.image, 2) ? (
+                        <img src={artist.image[2]['#text']} alt={artist.name} />
+                      ) : (
+                        <img src={getAvatarUrl(artist.name)} alt={artist.name} />
+                      )}
+                    </div>
+                    <h3>{artist.name}</h3>
+                    <p className="followers">
+                      {formatNumber(artist.listeners)} người nghe
+                    </p>
+                    <button className="follow-btn-small">+ Theo dõi</button>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
+        )}
       </div>
     </div>
   );

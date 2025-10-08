@@ -276,3 +276,122 @@
   color: #667eea;
   border-color: white;
 }
+
+/* Search Form */
+.artist-search-form {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.artist-search-input {
+  padding: 12px 25px;
+  border-radius: 50px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 16px;
+  min-width: 300px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.artist-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.artist-search-input:focus {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.02);
+}
+
+.artist-search-btn {
+  padding: 12px 30px;
+  border-radius: 50px;
+  border: 2px solid white;
+  background: white;
+  color: #667eea;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.artist-search-btn:hover {
+  background: transparent;
+  color: white;
+  transform: scale(1.05);
+}
+
+.artist-clear-btn {
+  padding: 12px 25px;
+  border-radius: 50px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.artist-clear-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: white;
+}
+
+/* Loading State */
+.loading-section {
+  text-align: center;
+  padding: 80px 20px;
+  color: white;
+}
+
+.loading-spinner {
+  font-size: 80px;
+  animation: spin 2s linear infinite;
+  margin-bottom: 20px;
+}
+
+.loading-section p {
+  font-size: 20px;
+  opacity: 0.9;
+}
+
+/* Search Results */
+.search-results-section {
+  margin-bottom: 60px;
+}
+
+.search-results-section h2 {
+  color: white;
+  font-size: 28px;
+  margin-bottom: 30px;
+  padding-left: 10px;
+}
+
+/* Artist Avatar Image Support */
+.artist-avatar img,
+.featured-avatar img,
+.rising-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.artist-avatar,
+.featured-avatar,
+.rising-avatar {
+  overflow: hidden;
+}
+
+/* Playcount info */
+.playcount {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
