@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import BackgroundAnimation from '../components/BackgroundAnimation';
-import Header from '../components/Header';
+import BackgroundAnimation from '../Components/BackgroundAnimation';
+import Header from '../Components/Header';
 import '../assets/Discover.css';
 
 export default function Discover() {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import BackgroundAnimation from '../components/BackgroundAnimation';
-import Header from '../components/Header';
+import BackgroundAnimation from '../Components/BackgroundAnimation';
+import Header from '../Components/Header';
 import '../assets/Artist.css';
 import { getTopArtists, searchArtists } from '../services/lastfmapi';
 
