@@ -1,4 +1,4 @@
-import '../assets/Playlist.css';
+import '../assets/PlaylistSection.css';
 import PlaylistCard from './PlaylistCard';
 
 export default function Playlist() {

@@ -1,0 +1,18 @@
+.playlist-section {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+.playlist-section h2 {
+  color: white;
+  font-size: 36px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
