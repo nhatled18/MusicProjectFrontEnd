@@ -51,12 +51,12 @@ export default function Header({ isLoggedIn, onLogin, onLogout }) {
 
         {!isLoggedIn ? (
           <div className="auth-buttons">
-            <button onClick={onLogin} className="auth-btn">
+           <Link to="/login" className="auth-btn">
               Đăng nhập
-            </button>
-            <button onClick={onLogin} className="auth-btn signup-btn">
+            </Link>
+            <Link to="/register" className="auth-btn signup-btn">
               Đăng ký
-            </button>
+            </Link>
           </div>
         ) : (
           <div className={`user-menu ${isLoggedIn ? 'active' : ''}`}>
