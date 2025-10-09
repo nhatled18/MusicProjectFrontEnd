@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import BackgroundAnimation from '../Components/BackgroundAnimation';
 import Header from '../Components/Header';
+import GenreCards from '../Components/GenreCards'; // ← THÊM DÒNG NÀY
 import '../assets/Discover.css';
 
 export default function Discover() {
@@ -8,17 +9,6 @@ export default function Discover() {
 
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => setIsLoggedIn(false);
-
-  const genres = [
-    { id: 1, name: 'Pop', icon: '🎤', color: '#FF6B9D' },
-    { id: 2, name: 'Rock', icon: '🎸', color: '#C23B22' },
-    { id: 3, name: 'Jazz', icon: '🎷', color: '#FFA500' },
-    { id: 4, name: 'Classical', icon: '🎻', color: '#9B59B6' },
-    { id: 5, name: 'Hip Hop', icon: '🎧', color: '#3498DB' },
-    { id: 6, name: 'EDM', icon: '🎛️', color: '#E74C3C' },
-    { id: 7, name: 'R&B', icon: '🎹', color: '#1ABC9C' },
-    { id: 8, name: 'Country', icon: '🤠', color: '#F39C12' },
-  ];
 
   const trending = [
     { id: 1, title: 'Midnight Dreams', artist: 'Luna Sky', plays: '2.4M', cover: '🌙' },
@@ -47,21 +37,13 @@ export default function Discover() {
           <p>Tìm kiếm thể loại yêu thích và khám phá những bản nhạc mới nhất</p>
         </section>
 
-        <section className="genres-section">
-          <h2>Thể Loại</h2>
-          <div className="genres-grid">
-            {genres.map(genre => (
-              <div 
-                key={genre.id} 
-                className="genre-card"
-                style={{ background: `linear-gradient(135deg, ${genre.color}, ${genre.color}dd)` }}
-              >
-                <span className="genre-icon">{genre.icon}</span>
-                <h3>{genre.name}</h3>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* THÊM COMPONENT NÀY */}
+        <GenreCards />
+
+        {/* XÓA SECTION CŨ NÀY ĐI */}
+        {/* <section className="genres-section">
+          ...
+        </section> */}
 
         <section className="trending-section">
           <h2>🔥 Trending Ngay Bây Giờ</h2>

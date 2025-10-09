@@ -8,6 +8,7 @@ import Login from './Pages/Login'
 import Register from './Pages/Register'
 import ForgotPassword from './Pages/ForgotPassword'
 import ResetPassword from './Pages/ResetPassword'
+import GenrePage from './Pages/GenrePage'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/genre/:genreName" element={<GenrePage />} />
         </Routes>
       </div>
     </Router>
