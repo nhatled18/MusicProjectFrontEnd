@@ -1,14 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../assets/Header.css';
 import { searchTracks } from '../services/itunesApi';
 import { searchArtists } from '../services/lastfmapi';
 
 export default function Header({ isLoggedIn, onLogin, onLogout }) {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState({ tracks: [], artists: [] });
   const [showResults, setShowResults] = useState(false);
   const [searching, setSearching] = useState(false);
+  const [playingTrack, setPlayingTrack] = useState(null);
+  const [audioRef, setAudioRef] = useState(null);
   const searchRef = useRef(null);
 
   // Close dropdown when click outside
@@ -22,6 +25,16 @@ export default function Header({ isLoggedIn, onLogin, onLogout }) {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef) {
+        audioRef.pause();
+        audioRef.currentTime = 0;
+      }
+    };
+  }, [audioRef]);
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) {
@@ -80,6 +93,34 @@ export default function Header({ isLoggedIn, onLogin, onLogout }) {
     setSearchResults({ tracks: [], artists: [] });
   };
 
+  const handleArtistClick = (artist) => {
+    clearSearch();
+    // Navigate to artist page with query parameter
+    navigate(`/artist?q=${encodeURIComponent(artist.name)}`);
+  };
+
+  const handleTrackClick = (track) => {
+    clearSearch();
+    
+    // Stop current playing track if any
+    if (audioRef) {
+      audioRef.pause();
+      audioRef.currentTime = 0;
+    }
+
+    // Play preview if available
+    if (track.previewUrl) {
+      const audio = new Audio(track.previewUrl);
+      audio.play();
+      audio.onended = () => {
+        setPlayingTrack(null);
+        setAudioRef(null);
+      };
+      setAudioRef(audio);
+      setPlayingTrack(track);
+    }
+  };
+
   return (
     <header className="header">
       <nav className="nav">
@@ -125,7 +166,7 @@ export default function Header({ isLoggedIn, onLogin, onLogout }) {
                             <div 
                               key={artist.mbid || index} 
                               className="search-result-item"
-                              onClick={clearSearch}
+                              onClick={() => handleArtistClick(artist)}
                             >
                               <img 
                                 src={hasValidImage ? artist.image[1]['#text'] : getAvatarUrl(artist.name)}
@@ -138,6 +179,7 @@ export default function Header({ isLoggedIn, onLogin, onLogout }) {
                                   {artist.listeners ? `${formatNumber(artist.listeners)} người nghe` : 'Nghệ sĩ'}
                                 </p>
                               </div>
+                              <span className="result-arrow">→</span>
                             </div>
                           );
                         })}
@@ -152,7 +194,7 @@ export default function Header({ isLoggedIn, onLogin, onLogout }) {
                           <div 
                             key={track.trackId} 
                             className="search-result-item"
-                            onClick={clearSearch}
+                            onClick={() => handleTrackClick(track)}
                           >
                             <img 
                               src={track.artworkUrl60}
@@ -163,6 +205,11 @@ export default function Header({ isLoggedIn, onLogin, onLogout }) {
                               <p className="result-title">{track.trackName}</p>
                               <p className="result-subtitle">{track.artistName}</p>
                             </div>
+                            {track.previewUrl && (
+                              <span className="result-play">
+                                {playingTrack?.trackId === track.trackId ? '⏸' : '▶'}
+                              </span>
+                            )}
                           </div>
                         ))}
                       </div>
