@@ -61,4 +61,4 @@ export const search = async (q, limit = 10) => {
 };
 
 // server.js (hosted): allow frontend origin
-app.use(cors({ origin: 'https://your-frontend.com', credentials: true }));
+app.use(cors({ origin: 'https://music-project-frontend.vercel.app', credentials: true }));
