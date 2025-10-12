@@ -1,64 +1,75 @@
 // src/services/api.js
-const API = import.meta.env.VITE_API_URL || ""; // nếu rỗng sẽ gọi relative /api/...
+import axios from 'axios';
 
-const jsonHeaders = (token) => {
-  const h = { "Content-Type": "application/json" };
-  if (token) h.Authorization = `Bearer ${token}`;
-  return h;
+const API_ORIGIN = import.meta.env.BACKEND_API_URL || ''; // '' => dùng relative /api/ (dev proxy)
+const api = axios.create({
+  baseURL: API_ORIGIN, // gọi các đường dẫn bắt đầu bằng '/api/...'
+  timeout: 8000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  // withCredentials: true // bật nếu dùng cookie-based auth
+});
+
+// helper để set token Bearer khi cần
+export const setAuthToken = (token) => {
+  if (token) api.defaults.headers.common.Authorization = `Bearer ${token}`;
+  else delete api.defaults.headers.common.Authorization;
 };
 
+const handleError = (err) => {
+  if (err.response && err.response.data) throw err.response.data;
+  throw { message: err.message || 'Unknown error' };
+};
+
+// Auth
 export const registerUser = async (data) => {
-  const res = await fetch(`${API}/api/auth/register`, {
-    method: "POST",
-    headers: jsonHeaders(),
-    body: JSON.stringify(data),
-  });
-  return res.json();
+  try {
+    const res = await api.post('https://music-project-back-end.vercel.app/api/auth/register', data);
+    return res.data;
+  } catch (err) { handleError(err); }
 };
 
 export const loginUser = async (data) => {
-  const res = await fetch(`${API}/api/auth/login`, {
-    method: "POST",
-    headers: jsonHeaders(),
-    body: JSON.stringify(data),
-  });
-  return res.json();
+  try {
+    const res = await api.post('https://music-project-back-end.vercel.app/api/auth/login', data);
+    return res.data;
+  } catch (err) { handleError(err); }
 };
 
-// assumed profile route is mounted under /api/auth/profile
-export const fetchUserProfile = async (token) => {
-  const res = await fetch(`${API}/api/auth/profile`, {
-    method: "GET",
-    headers: jsonHeaders(token),
-  });
-  return res.json();
+export const fetchUserProfile = async (token = null, withCredentials = false) => {
+  try {
+    if (token) setAuthToken(token);
+    const res = await api.get('https://music-project-back-end.vercel.app/api/auth/profile', { withCredentials });
+    return res.data;
+  } catch (err) { handleError(err); }
 };
 
-// Tracks endpoints (match backend /api/tracks)
-export const fetchTracks = async (params = "", token) => {
-  const res = await fetch(`${API}/api/tracks${params}`, {
-    method: "GET",
-    headers: jsonHeaders(token),
-  });
-  return res.json();
+// Tracks
+export const fetchTracks = async (params = '', token = null, withCredentials = false) => {
+  try {
+    if (token) setAuthToken(token);
+    const res = await api.get(`https://music-project-back-end.vercel.app/api/tracks${params}`, { withCredentials });
+    return res.data;
+  } catch (err) { handleError(err); }
 };
 
-export const fetchTrackById = async (id, token) => {
-  const res = await fetch(`${API}/api/tracks/${id}`, {
-    method: "GET",
-    headers: jsonHeaders(token),
-  });
-  return res.json();
+export const fetchTrackById = async (id, token = null, withCredentials = false) => {
+  try {
+    if (token) setAuthToken(token);
+    const res = await api.get(`https://music-project-back-end.vercel.app/api/tracks/${id}`, { withCredentials });
+    return res.data;
+  } catch (err) { handleError(err); }
 };
 
-// Search endpoint (match backend /api/search)
+// Search
 export const search = async (q, limit = 10) => {
-  const res = await fetch(`${API}/api/search?q=${encodeURIComponent(q)}&limit=${limit}`, {
-    method: "GET",
-    headers: jsonHeaders(),
-  });
-  return res.json();
+  try {
+    const res = await api.get(`https://movie-project-back-end.vercel.app/api/search`, {
+      params: { q, limit }
+    });
+    return res.data;
+  } catch (err) { handleError(err); }
 };
 
-// server.js (hosted): allow frontend origin
-app.use(cors({ origin: 'https://music-project-frontend.vercel.app', credentials: true }));
+export default api;
