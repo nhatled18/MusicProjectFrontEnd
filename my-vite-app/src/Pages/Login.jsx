@@ -170,10 +170,20 @@ export default function Login() {
 
             <div className="social-login">
               <button type="button" className="social-btn google-btn" disabled={loading}>
-                <span>🔵</span> Google
+                 <img 
+                  src="/Images/Google.png"   // đường dẫn từ public
+                  alt="Google" 
+                  style={{ width: '20px', marginRight: '8px' }} // tuỳ chỉnh size/margin
+                  />
+                  Google
               </button>
               <button type="button" className="social-btn facebook-btn" disabled={loading}>
-                <span>📘</span> Facebook
+                <img 
+                  src="/Images/Facebook.png"   // đường dẫn từ public
+                  alt="Facebook" 
+                  style={{ width: '20px', marginRight: '8px' }} // tuỳ chỉnh size/margin
+                />
+                Facebook
               </button>
             </div>
 
