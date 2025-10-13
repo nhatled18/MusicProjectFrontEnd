@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BackgroundAnimation from '../Components/BackgroundAnimation';
 import '../assets/Auth.css';
+import { registerUser } from '../services/authApi'; // ✅ Bỏ comment
 
 export default function Register() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function Register() {
   });
   const [errors, setErrors] = useState({});
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [loading, setLoading] = useState(false); // ✅ Thêm loading state
 
   const handleChange = (e) => {
     setFormData({
@@ -62,13 +64,45 @@ export default function Register() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => { // ✅ Thêm async
     e.preventDefault();
     
     if (validateForm()) {
-      console.log('Register:', formData);
-      // Simulate successful registration
-      navigate('/login');
+      setLoading(true); // ✅ Bật loading
+      
+      try {
+        // ✅ Gọi API register
+        const response = await registerUser({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        });
+
+        console.log('✅ Register success:', response);
+
+        if (response.success) {
+          // ✅ Hiển thị thông báo thành công
+          alert('🎉 Đăng ký thành công!');
+          
+          // ✅ Chuyển đến trang chủ hoặc dashboard
+          navigate('/'); // hoặc navigate('/dashboard')
+        }
+      } catch (error) {
+        console.error('❌ Register error:', error);
+        
+        // ✅ Hiển thị lỗi từ server
+        if (error.response?.data?.message) {
+          setErrors({ 
+            api: error.response.data.message 
+          });
+        } else {
+          setErrors({ 
+            api: 'Đăng ký thất bại. Vui lòng thử lại!' 
+          });
+        }
+      } finally {
+        setLoading(false); // ✅ Tắt loading
+      }
     }
   };
 
@@ -89,6 +123,13 @@ export default function Register() {
           </div>
 
           <form onSubmit={handleSubmit} className="auth-form">
+            {/* ✅ Hiển thị lỗi API nếu có */}
+            {errors.api && (
+              <div className="alert alert-error">
+                ❌ {errors.api}
+              </div>
+            )}
+
             <div className="form-group">
               <label htmlFor="name">Tên của bạn</label>
               <input
@@ -99,6 +140,7 @@ export default function Register() {
                 onChange={handleChange}
                 placeholder="Nhập tên của bạn"
                 className={errors.name ? 'error' : ''}
+                disabled={loading} // ✅ Disable khi loading
               />
               {errors.name && <span className="error-message">{errors.name}</span>}
             </div>
@@ -113,6 +155,7 @@ export default function Register() {
                 onChange={handleChange}
                 placeholder="example@email.com"
                 className={errors.email ? 'error' : ''}
+                disabled={loading}
               />
               {errors.email && <span className="error-message">{errors.email}</span>}
             </div>
@@ -128,6 +171,7 @@ export default function Register() {
                   onChange={handleChange}
                   placeholder="••••••••"
                   className={errors.password ? 'error' : ''}
+                  disabled={loading}
                 />
                 {errors.password && <span className="error-message">{errors.password}</span>}
               </div>
@@ -142,6 +186,7 @@ export default function Register() {
                   onChange={handleChange}
                   placeholder="••••••••"
                   className={errors.confirmPassword ? 'error' : ''}
+                  disabled={loading}
                 />
                 {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
               </div>
@@ -153,6 +198,7 @@ export default function Register() {
                   type="checkbox" 
                   checked={acceptTerms}
                   onChange={(e) => setAcceptTerms(e.target.checked)}
+                  disabled={loading}
                 />
                 <span>
                   Tôi đồng ý với{' '}
@@ -164,8 +210,13 @@ export default function Register() {
               {errors.terms && <span className="error-message">{errors.terms}</span>}
             </div>
 
-            <button type="submit" className="submit-btn">
-              Đăng ký
+            {/* ✅ Button với loading state */}
+            <button 
+              type="submit" 
+              className="submit-btn"
+              disabled={loading}
+            >
+              {loading ? '⏳ Đang đăng ký...' : 'Đăng ký'}
             </button>
 
             <div className="divider">
@@ -173,10 +224,10 @@ export default function Register() {
             </div>
 
             <div className="social-login">
-              <button type="button" className="social-btn google-btn">
+              <button type="button" className="social-btn google-btn" disabled={loading}>
                 <span>🔵</span> Google
               </button>
-              <button type="button" className="social-btn facebook-btn">
+              <button type="button" className="social-btn facebook-btn" disabled={loading}>
                 <span>📘</span> Facebook
               </button>
             </div>

@@ -591,3 +591,29 @@
     font-size: 80px;
   }
 }
+.error-banner {
+  background: #fee;
+  color: #c33;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid #fcc;
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loading-spinner-btn {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

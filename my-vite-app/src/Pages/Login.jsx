@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BackgroundAnimation from '../Components/BackgroundAnimation';
 import '../assets/Auth.css';
+import { loginUser } from '../services/authApi'; 
 
 export default function Login() {
   const navigate = useNavigate();
@@ -11,13 +12,13 @@ export default function Login() {
   });
   const [errors, setErrors] = useState({});
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false); // ← THÊM loading state
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
-    // Clear error when user types
     if (errors[e.target.name]) {
       setErrors({
         ...errors,
@@ -45,20 +46,40 @@ export default function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  // ✅ UPDATE handleSubmit để call API
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validateForm()) {
-      // Simulate successful login
-      console.log('Login:', formData, 'Remember:', rememberMe);
+      setLoading(true);
       
-      // Save to localStorage if remember me
-      if (rememberMe) {
-        localStorage.setItem('user', JSON.stringify({ email: formData.email }));
+      try {
+        // Call API
+        const response = await loginUser({
+          email: formData.email,
+          password: formData.password
+        });
+
+        if (response.success) {
+          // Save to localStorage if remember me
+          if (rememberMe) {
+            localStorage.setItem('rememberMe', 'true');
+          }
+          
+          // Success notification
+          alert(`✅ ${response.message || 'Đăng nhập thành công!'}`);
+          
+          // Navigate to home
+          navigate('/');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        const message = error.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
+        setErrors({ submit: message });
+        alert(`❌ ${message}`);
+      } finally {
+        setLoading(false);
       }
-      
-      // Navigate to home
-      navigate('/');
     }
   };
 
@@ -79,6 +100,13 @@ export default function Login() {
           </div>
 
           <form onSubmit={handleSubmit} className="auth-form">
+            {/* ✅ THÊM error banner */}
+            {errors.submit && (
+              <div className="error-banner">
+                {errors.submit}
+              </div>
+            )}
+
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
@@ -89,6 +117,7 @@ export default function Login() {
                 onChange={handleChange}
                 placeholder="example@email.com"
                 className={errors.email ? 'error' : ''}
+                disabled={loading} // ← Disable khi đang loading
               />
               {errors.email && <span className="error-message">{errors.email}</span>}
             </div>
@@ -103,6 +132,7 @@ export default function Login() {
                 onChange={handleChange}
                 placeholder="••••••••"
                 className={errors.password ? 'error' : ''}
+                disabled={loading} // ← Disable khi đang loading
               />
               {errors.password && <span className="error-message">{errors.password}</span>}
             </div>
@@ -113,6 +143,7 @@ export default function Login() {
                   type="checkbox" 
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
+                  disabled={loading}
                 />
                 <span>Ghi nhớ đăng nhập</span>
               </label>
@@ -121,8 +152,16 @@ export default function Login() {
               </Link>
             </div>
 
-            <button type="submit" className="submit-btn">
-              Đăng nhập
+            {/* ✅ UPDATE button với loading state */}
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? (
+                <>
+                  <span className="loading-spinner-btn">⏳</span>
+                  Đang đăng nhập...
+                </>
+              ) : (
+                'Đăng nhập'
+              )}
             </button>
 
             <div className="divider">
@@ -130,10 +169,10 @@ export default function Login() {
             </div>
 
             <div className="social-login">
-              <button type="button" className="social-btn google-btn">
+              <button type="button" className="social-btn google-btn" disabled={loading}>
                 <span>🔵</span> Google
               </button>
-              <button type="button" className="social-btn facebook-btn">
+              <button type="button" className="social-btn facebook-btn" disabled={loading}>
                 <span>📘</span> Facebook
               </button>
             </div>
