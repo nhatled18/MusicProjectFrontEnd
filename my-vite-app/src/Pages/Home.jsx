@@ -5,7 +5,6 @@ import Hero from '../Components/Hero';
 import MusicPlayer from '../Components/MusicPlayer';
 import Playlist from '../Components/PlaylistSection';
 import Notification from '../Components/Notification';
-
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -36,7 +35,6 @@ export default function Home() {
       <Hero />
       <MusicPlayer />
       <Playlist />
-      
       {notification && <Notification message={notification} />}
     </>
   );

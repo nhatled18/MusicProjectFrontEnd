@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../assets/Header.css';
 import { searchTracks } from '../services/itunesApi';
 import { searchArtists } from '../services/lastfmapi';
+import DropdownMenu from './DropdownMenu'; 
 
 export default function Header({ isLoggedIn, onLogin, onLogout }) {
   const navigate = useNavigate();
@@ -234,6 +235,7 @@ export default function Header({ isLoggedIn, onLogin, onLogout }) {
             <li><Link to="/playlist">Playlist</Link></li>
             <li><Link to="/artist">Nghệ sĩ</Link></li>
           </ul>
+          <DropdownMenu />
         </div>
 
         {!isLoggedIn ? (
