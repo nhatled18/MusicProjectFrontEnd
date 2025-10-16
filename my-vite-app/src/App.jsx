@@ -16,25 +16,25 @@ import FavoritePage from './Pages/FavoritePage';
 
 function App() {
   return (
-    <Router>
-      <div className="app">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/discover" element={<Discover />} />
-          <Route path="/artist" element={<Artist />} />
-          <Route path="/playlist" element={<PlaylistPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/genre/:genreName" element={<GenrePage />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/favorites" element={<FavoritePage />} />
-        </Routes>
-      </div>
-    </Router>
-  )
+      <Router>
+        <div className="app">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/discover" element={<Discover />} />
+            <Route path="/artist" element={<Artist />} />
+            <Route path="/playlist" element={<PlaylistPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/genre/:genreName" element={<GenrePage />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/favorites" element={<FavoritePage />} />
+          </Routes>
+        </div>
+      </Router>
+  );
 }
 
 export default App

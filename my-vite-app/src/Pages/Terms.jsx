@@ -28,7 +28,6 @@ export default function Terms() {
             <li>Không sử dụng dịch vụ để vi phạm bản quyền, pháp luật hoặc quấy rối người khác.</li>
           </ul>
         </section>
-
         <section className="terms-section">
           <h2>3. Hạn chế trách nhiệm</h2>
           <p>

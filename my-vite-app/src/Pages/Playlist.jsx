@@ -4,6 +4,8 @@ import Header from '../Components/Header';
 import '../assets/Playlist.css';
 import { useFavorites } from '../context/FavoriteContext';
 import { searchTracks, searchTracksByGenre, getTopSongs } from '../services/itunesApi';
+import { saveFavorite, removeFavorite } from '../services/favoritesApi';
+
 
 export default function PlaylistPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -195,11 +197,21 @@ export default function PlaylistPage() {
                     >
                       {playingTrack?.trackId === track.trackId ? '⏸️' : '▶️'}
                     </button>
-                    <button 
+               <button 
                       className={`action-btn like-btn ${isFavorite(track.trackId) ? 'liked' : ''}`}
-                      onClick={() => {
+                      onClick={async () => {
+                        const currentUser = JSON.parse(localStorage.getItem('user')); // ✅ lấy user từ localStorage
+                        if (!currentUser) return alert('Vui lòng đăng nhập trước!');
+
                         const added = toggleFavorite(track);
-                        alert(added ? '❤️ Đã thêm vào yêu thích!' : '💔 Đã xóa khỏi yêu thích!');
+
+                        try {
+                          await saveFavorite(track, currentUser._id); // gọi API với userId
+                          alert(added ? '❤️ Đã thêm vào yêu thích!' : '💔 Đã xóa khỏi yêu thích!');
+                        } catch (err) {
+                          console.error('Lỗi khi lưu favorite:', err);
+                          alert('⚠️ Lỗi khi lưu dữ liệu yêu thích');
+                        }
                       }}
                       title="Yêu thích"
                     >
