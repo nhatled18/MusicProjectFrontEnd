@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import BackgroundAnimation from '../Components/BackgroundAnimation';
 import Header from '../Components/Header';
 import '../assets/Playlist.css';
+import { useFavorites } from '../context/FavoriteContext';
 import { searchTracks, searchTracksByGenre, getTopSongs } from '../services/itunesApi';
 
 export default function PlaylistPage() {
@@ -14,6 +15,8 @@ export default function PlaylistPage() {
   const [searching, setSearching] = useState(false);
   const [playingTrack, setPlayingTrack] = useState(null);
   const [audioRef, setAudioRef] = useState(null);
+
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => setIsLoggedIn(false);
@@ -192,8 +195,15 @@ export default function PlaylistPage() {
                     >
                       {playingTrack?.trackId === track.trackId ? '⏸️' : '▶️'}
                     </button>
-                    <button className="action-btn like-btn" title="Yêu thích">
-                      ❤️
+                    <button 
+                      className={`action-btn like-btn ${isFavorite(track.trackId) ? 'liked' : ''}`}
+                      onClick={() => {
+                        const added = toggleFavorite(track);
+                        alert(added ? '❤️ Đã thêm vào yêu thích!' : '💔 Đã xóa khỏi yêu thích!');
+                      }}
+                      title="Yêu thích"
+                    >
+                      {isFavorite(track.trackId) ? '❤️' : '🤍'}
                     </button>
                     <button className="action-btn add-btn" title="Thêm vào playlist">
                       ➕

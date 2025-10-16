@@ -11,6 +11,7 @@ import ResetPassword from './Pages/ResetPassword'
 import GenrePage from './Pages/GenrePage'
 import Terms from './Pages/Terms'
 import Privacy from './Pages/Privacy'
+import FavoritePage from './Pages/FavoritePage';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/genre/:genreName" element={<GenrePage />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/favorites" element={<FavoritePage />} />
         </Routes>
       </div>
     </Router>
