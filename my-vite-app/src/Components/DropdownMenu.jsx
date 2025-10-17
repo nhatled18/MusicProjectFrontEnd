@@ -1,11 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useFollow } from '../context/FollowContext'; 
 import '../assets/Dropdown.css';
 
 const DropdownMenu = ({ favoritesCount = 0 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  
+  // Lấy dữ liệu từ FollowContext
+  const { followedArtists } = useFollow();
 
   // Đóng dropdown khi click bên ngoài
   useEffect(() => {
@@ -25,7 +29,7 @@ const DropdownMenu = ({ favoritesCount = 0 }) => {
   }, [isOpen]);
 
   const handleFollow = () => {
-    alert('Đã theo dõi!');
+    navigate('/follow');
     setIsOpen(false);
   };
 
@@ -58,9 +62,18 @@ const DropdownMenu = ({ favoritesCount = 0 }) => {
               </svg>
             </div>
             <div className="item-content">
-              <div className="item-title">Theo dõi</div>
-              <div className="item-description">Nhận thông báo mới</div>
+              <div className="item-title">
+                Theo dõi {followedArtists.length > 0 && `(${followedArtists.length})`}
+              </div>
+              <div className="item-description">
+                {followedArtists.length > 0 
+                  ? `${followedArtists.length} nghệ sĩ đang theo dõi`
+                  : 'Nhận thông báo mới'}
+              </div>
             </div>
+            <svg className="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
           </button>
 
           <div className="divider"></div>

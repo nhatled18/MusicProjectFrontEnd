@@ -12,7 +12,7 @@ import GenrePage from './Pages/GenrePage'
 import Terms from './Pages/Terms'
 import Privacy from './Pages/Privacy'
 import FavoritePage from './Pages/FavoritePage';
-
+import FollowPage from './Pages/FollowPage';
 
 function App() {
   return (
@@ -31,6 +31,7 @@ function App() {
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/favorites" element={<FavoritePage />} />
+            <Route path="/follow" element={<FollowPage />} />
           </Routes>
         </div>
       </Router>

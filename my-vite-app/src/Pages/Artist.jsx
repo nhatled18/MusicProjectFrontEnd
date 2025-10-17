@@ -3,6 +3,7 @@ import BackgroundAnimation from '../Components/BackgroundAnimation';
 import Header from '../Components/Header';
 import '../assets/Artist.css';
 import { getTopArtists, searchArtists } from '../services/lastfmapi';
+import { useFollow } from '../context/FollowContext'; // Import hook
 
 export default function Artist() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -11,6 +12,9 @@ export default function Artist() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
+
+  // Lấy functions từ FollowContext
+  const { followArtist, unfollowArtist, isFollowingArtist } = useFollow();
 
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => setIsLoggedIn(false);
@@ -41,6 +45,24 @@ export default function Artist() {
   const clearSearch = () => {
     setSearchQuery('');
     setSearchResults([]);
+  };
+
+  // Handle follow/unfollow
+  const handleFollowClick = (artist) => {
+    const isFollowing = isFollowingArtist(artist.name);
+    
+    if (isFollowing) {
+      unfollowArtist(artist.name);
+    } else {
+      followArtist({
+        name: artist.name,
+        listeners: artist.listeners,
+        playcount: artist.playcount,
+        image: artist.image,
+        mbid: artist.mbid,
+        url: artist.url
+      });
+    }
   };
 
   // Format số followers
@@ -109,21 +131,30 @@ export default function Artist() {
           <section className="search-results-section">
             <h2>🔍 Kết quả tìm kiếm "{searchQuery}"</h2>
             <div className="popular-grid">
-              {searchResults.map((artist, index) => (
-                <div key={artist.mbid || index} className="artist-card">
-                  <div className="artist-avatar">
-                    {hasValidImage(artist.image, 2) ? (
-                      <img src={artist.image[2]['#text']} alt={artist.name} />
-                    ) : (
-                      <img src={getAvatarUrl(artist.name)} alt={artist.name} />
-                    )}
+              {searchResults.map((artist, index) => {
+                const isFollowing = isFollowingArtist(artist.name);
+                return (
+                  <div key={artist.mbid || index} className="artist-card">
+                    <div className="artist-avatar">
+                      {hasValidImage(artist.image, 2) ? (
+                        <img src={artist.image[2]['#text']} alt={artist.name} />
+                      ) : (
+                        <img src={getAvatarUrl(artist.name)} alt={artist.name} />
+                      )}
+                    </div>
+                    <h3>{artist.name}</h3>
+                    <p className="followers">
+                      {artist.listeners ? `${formatNumber(artist.listeners)} người nghe` : 'Nghệ sĩ'}
+                    </p>
+                    <button 
+                      className={`follow-btn-small ${isFollowing ? 'following' : ''}`}
+                      onClick={() => handleFollowClick(artist)}
+                    >
+                      {isFollowing ? '✓ Đang theo dõi' : '+ Theo dõi'}
+                    </button>
                   </div>
-                  <h3>{artist.name}</h3>
-                  <p className="followers">
-                    {artist.listeners ? `${formatNumber(artist.listeners)} người nghe` : 'Nghệ sĩ'}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
         )}
@@ -142,74 +173,99 @@ export default function Artist() {
             <section className="featured-artists-section">
               <h2>⭐ Nghệ Sĩ Nổi Bật</h2>
               <div className="featured-grid">
-                {featuredArtists.map((artist, index) => (
-                  <div key={artist.mbid || index} className="featured-artist-card">
-                    <div className="featured-avatar">
-                      {hasValidImage(artist.image, 3) ? (
-                        <img src={artist.image[3]['#text']} alt={artist.name} />
-                      ) : (
-                        <img src={getAvatarUrl(artist.name)} alt={artist.name} />
-                      )}
+                {featuredArtists.map((artist, index) => {
+                  const isFollowing = isFollowingArtist(artist.name);
+                  return (
+                    <div key={artist.mbid || index} className="featured-artist-card">
+                      <div className="featured-avatar">
+                        {hasValidImage(artist.image, 3) ? (
+                          <img src={artist.image[3]['#text']} alt={artist.name} />
+                        ) : (
+                          <img src={getAvatarUrl(artist.name)} alt={artist.name} />
+                        )}
+                      </div>
+                      <div className="featured-info">
+                        <h3>
+                          {artist.name}
+                          <span className="verified">✓</span>
+                        </h3>
+                        <p className="followers">
+                          👥 {formatNumber(artist.listeners)} người nghe
+                        </p>
+                        <p className="playcount">
+                          ▶ {formatNumber(artist.playcount)} lượt phát
+                        </p>
+                        <button 
+                          className={`follow-btn ${isFollowing ? 'following' : ''}`}
+                          onClick={() => handleFollowClick(artist)}
+                        >
+                          {isFollowing ? '✓ Đang theo dõi' : '+ Theo dõi'}
+                        </button>
+                      </div>
                     </div>
-                    <div className="featured-info">
-                      <h3>
-                        {artist.name}
-                        <span className="verified">✓</span>
-                      </h3>
-                      <p className="followers">
-                        👥 {formatNumber(artist.listeners)} người nghe
-                      </p>
-                      <p className="playcount">
-                        ▶ {formatNumber(artist.playcount)} lượt phát
-                      </p>
-                      <button className="follow-btn">Theo dõi</button>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
 
             <section className="popular-artists-section">
               <h2>🔥 Nghệ Sĩ Phổ Biến</h2>
               <div className="popular-grid">
-                {popularArtists.map((artist, index) => (
-                  <div key={artist.mbid || index} className="artist-card">
-                    <div className="artist-avatar">
-                      {hasValidImage(artist.image, 2) ? (
-                        <img src={artist.image[2]['#text']} alt={artist.name} />
-                      ) : (
-                        <img src={getAvatarUrl(artist.name)} alt={artist.name} />
-                      )}
+                {popularArtists.map((artist, index) => {
+                  const isFollowing = isFollowingArtist(artist.name);
+                  return (
+                    <div key={artist.mbid || index} className="artist-card">
+                      <div className="artist-avatar">
+                        {hasValidImage(artist.image, 2) ? (
+                          <img src={artist.image[2]['#text']} alt={artist.name} />
+                        ) : (
+                          <img src={getAvatarUrl(artist.name)} alt={artist.name} />
+                        )}
+                      </div>
+                      <h3>{artist.name}</h3>
+                      <p className="followers">
+                        {formatNumber(artist.listeners)} người nghe
+                      </p>
+                      <button 
+                        className={`follow-btn-small ${isFollowing ? 'following' : ''}`}
+                        onClick={() => handleFollowClick(artist)}
+                      >
+                        {isFollowing ? '✓ Đang theo dõi' : '+ Theo dõi'}
+                      </button>
                     </div>
-                    <h3>{artist.name}</h3>
-                    <p className="followers">
-                      {formatNumber(artist.listeners)} người nghe
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
 
             <section className="rising-stars-section">
               <h2>🚀 Tài Năng Mới Nổi</h2>
               <div className="rising-grid">
-                {risingStars.map((artist, index) => (
-                  <div key={artist.mbid || index} className="rising-card">
-                    <div className="rising-badge">NEW</div>
-                    <div className="rising-avatar">
-                      {hasValidImage(artist.image, 2) ? (
-                        <img src={artist.image[2]['#text']} alt={artist.name} />
-                      ) : (
-                        <img src={getAvatarUrl(artist.name)} alt={artist.name} />
-                      )}
+                {risingStars.map((artist, index) => {
+                  const isFollowing = isFollowingArtist(artist.name);
+                  return (
+                    <div key={artist.mbid || index} className="rising-card">
+                      <div className="rising-badge">NEW</div>
+                      <div className="rising-avatar">
+                        {hasValidImage(artist.image, 2) ? (
+                          <img src={artist.image[2]['#text']} alt={artist.name} />
+                        ) : (
+                          <img src={getAvatarUrl(artist.name)} alt={artist.name} />
+                        )}
+                      </div>
+                      <h3>{artist.name}</h3>
+                      <p className="followers">
+                        {formatNumber(artist.listeners)} người nghe
+                      </p>
+                      <button 
+                        className={`follow-btn-small ${isFollowing ? 'following' : ''}`}
+                        onClick={() => handleFollowClick(artist)}
+                      >
+                        {isFollowing ? '✓ Đang theo dõi' : '+ Theo dõi'}
+                      </button>
                     </div>
-                    <h3>{artist.name}</h3>
-                    <p className="followers">
-                      {formatNumber(artist.listeners)} người nghe
-                    </p>
-                    <button className="follow-btn-small">+ Theo dõi</button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
           </>
