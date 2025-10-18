@@ -3,7 +3,8 @@ import BackgroundAnimation from '../Components/BackgroundAnimation';
 import Header from '../Components/Header';
 import '../assets/Artist.css';
 import { getTopArtists, searchArtists } from '../services/lastfmapi';
-import { useFollow } from '../context/FollowContext'; // Import hook
+import { useFollow } from '../context/FollowContext'; 
+
 
 export default function Artist() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

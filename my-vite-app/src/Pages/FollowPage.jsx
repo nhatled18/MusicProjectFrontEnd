@@ -39,7 +39,7 @@ const FollowPage = () => {
           <div className="empty-icon">🎵</div>
           <h2>Chưa có nghệ sĩ nào</h2>
           <p>Bạn chưa theo dõi nghệ sĩ nào. Hãy khám phá và theo dõi nghệ sĩ yêu thích của bạn!</p>
-          <button className="explore-btn" onClick={() => window.location.href = '/'}>
+          <button className="explore-btn" onClick={() => window.location.href = '/artist'}>
             Khám phá nghệ sĩ
           </button>
         </div>
