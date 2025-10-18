@@ -37,13 +37,10 @@ export default function Discover() {
           <p>Tìm kiếm thể loại yêu thích và khám phá những bản nhạc mới nhất</p>
         </section>
 
-        {/* THÊM COMPONENT NÀY */}
+    
         <GenreCards />
 
-        {/* XÓA SECTION CŨ NÀY ĐI */}
-        {/* <section className="genres-section">
-          ...
-        </section> */}
+     
 
         <section className="trending-section">
           <h2>🔥 Trending Ngay Bây Giờ</h2>
