@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import BackgroundAnimation from '../Components/BackgroundAnimation';
 import Header from '../Components/Header';
-import GenreCards from '../Components/GenreCards'; // ← THÊM DÒNG NÀY
+import GenreCards from '../Components/GenreCards'; 
 import '../assets/Discover.css';
 
 export default function Discover() {

@@ -11,8 +11,6 @@ const FollowPage = () => {
   };
 
   const handleArtistClick = (artist) => {
-    // Điều hướng đến trang chi tiết nghệ sĩ
-    // Nếu dùng React Router: navigate(`/artist/${encodeURIComponent(artist.name)}`);
     console.log('Xem chi tiết:', artist.name);
   };
 

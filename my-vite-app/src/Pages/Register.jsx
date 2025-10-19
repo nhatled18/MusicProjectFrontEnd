@@ -226,17 +226,17 @@ export default function Register() {
             <div className="social-login">
               <button type="button" className="social-btn google-btn" disabled={loading}>
                 <img 
-                    src="/Images/Google.png"   // đường dẫn từ public
+                    src="/Images/Google.png"   
                     alt="Google" 
-                    style={{ width: '20px', marginRight: '8px' }} // tuỳ chỉnh size/margin
+                    style={{ width: '20px', marginRight: '8px' }} 
                   />
                   Google
               </button>
               <button type="button" className="social-btn facebook-btn" disabled={loading}>
                 <img 
-                  src="/Images/Facebook.png"   // đường dẫn từ public
+                  src="/Images/Facebook.png"   
                   alt="Facebook" 
-                  style={{ width: '20px', marginRight: '8px' }} // tuỳ chỉnh size/margin
+                  style={{ width: '20px', marginRight: '8px' }}
                 />
                 Facebook
               </button>
